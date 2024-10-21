@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:video_player/video_player.dart';
+// import 'package:video_player/video_player.dart';
 
 void main() {
   runApp(MyApp());
@@ -41,8 +41,8 @@ class _MyHomePageState extends State<MyHomePage> {
   PickedFile _imageFile;
   dynamic _pickImageError;
   bool isVideo = false;
-  VideoPlayerController _controller;
-  VideoPlayerController _toBeDisposed;
+  // VideoPlayerController _controller;
+  // VideoPlayerController _toBeDisposed;
   String _retrieveDataError;
 
   final ImagePicker _picker = ImagePicker();
@@ -51,36 +51,36 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController qualityController = TextEditingController();
 
   Future<void> _playVideo(PickedFile file) async {
-    if (file != null && mounted) {
-      await _disposeVideoController();
-      if (kIsWeb) {
-        _controller = VideoPlayerController.network(file.path);
-        // In web, most browsers won't honor a programmatic call to .play
-        // if the video has a sound track (and is not muted).
-        // Mute the video so it auto-plays in web!
-        // This is not needed if the call to .play is the result of user
-        // interaction (clicking on a "play" button, for example).
-        await _controller.setVolume(0.0);
-      } else {
-        _controller = VideoPlayerController.file(File(file.path));
-        await _controller.setVolume(1.0);
-      }
-      await _controller.initialize();
-      await _controller.setLooping(true);
-      await _controller.play();
-      setState(() {});
-    }
+    // if (file != null && mounted) {
+    //   await _disposeVideoController();
+    //   if (kIsWeb) {
+    //     _controller = VideoPlayerController.network(file.path);
+    //     // In web, most browsers won't honor a programmatic call to .play
+    //     // if the video has a sound track (and is not muted).
+    //     // Mute the video so it auto-plays in web!
+    //     // This is not needed if the call to .play is the result of user
+    //     // interaction (clicking on a "play" button, for example).
+    //     await _controller.setVolume(0.0);
+    //   } else {
+    //     _controller = VideoPlayerController.file(File(file.path));
+    //     await _controller.setVolume(1.0);
+    //   }
+    //   await _controller.initialize();
+    //   await _controller.setLooping(true);
+    //   await _controller.play();
+    //   setState(() {});
+    // }
   }
 
   void _onImageButtonPressed(ImageSource source, {BuildContext context}) async {
-    if (_controller != null) {
-      await _controller.setVolume(0.0);
-    }
-    if (isVideo) {
-      final PickedFile file = await _picker.getVideo(
-          source: source, maxDuration: const Duration(seconds: 10));
-      await _playVideo(file);
-    } else {
+    // if (_controller != null) {
+    //   await _controller.setVolume(0.0);
+    // }
+    // if (isVideo) {
+    //   final PickedFile file = await _picker.getVideo(
+    //       source: source, maxDuration: const Duration(seconds: 10));
+    //   await _playVideo(file);
+    // } else {
       await _displayPickImageDialog(context,
           (double maxWidth, double maxHeight, int quality) async {
         try {
@@ -99,15 +99,15 @@ class _MyHomePageState extends State<MyHomePage> {
           });
         }
       });
-    }
+    // }
   }
 
   @override
   void deactivate() {
-    if (_controller != null) {
-      _controller.setVolume(0.0);
-      _controller.pause();
-    }
+    // if (_controller != null) {
+    //   _controller.setVolume(0.0);
+    //   _controller.pause();
+    // }
     super.deactivate();
   }
 
@@ -121,28 +121,28 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _disposeVideoController() async {
-    if (_toBeDisposed != null) {
-      await _toBeDisposed.dispose();
-    }
-    _toBeDisposed = _controller;
-    _controller = null;
+    // if (_toBeDisposed != null) {
+    //   await _toBeDisposed.dispose();
+    // }
+    // _toBeDisposed = _controller;
+    // _controller = null;
   }
 
   Widget _previewVideo() {
-    final Text retrieveError = _getRetrieveErrorWidget();
-    if (retrieveError != null) {
-      return retrieveError;
-    }
-    if (_controller == null) {
-      return const Text(
-        'You have not yet picked a video',
-        textAlign: TextAlign.center,
-      );
-    }
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: AspectRatioVideo(_controller),
-    );
+    // final Text retrieveError = _getRetrieveErrorWidget();
+    // if (retrieveError != null) {
+    //   return retrieveError;
+    // }
+    // if (_controller == null) {
+    //   return const Text(
+    //     'You have not yet picked a video',
+    //     textAlign: TextAlign.center,
+    //   );
+    // }
+    // return Padding(
+    //   padding: const EdgeInsets.all(10.0),
+    //   child: AspectRatioVideo(_controller),
+    // );
   }
 
   Widget _previewImage() {
@@ -358,37 +358,37 @@ typedef void OnPickImageCallback(
     double maxWidth, double maxHeight, int quality);
 
 class AspectRatioVideo extends StatefulWidget {
-  AspectRatioVideo(this.controller);
+  // AspectRatioVideo(this.controller);
 
-  final VideoPlayerController controller;
+  // final VideoPlayerController controller;
 
   @override
   AspectRatioVideoState createState() => AspectRatioVideoState();
 }
 
 class AspectRatioVideoState extends State<AspectRatioVideo> {
-  VideoPlayerController get controller => widget.controller;
+  // VideoPlayerController get controller => widget.controller;
   bool initialized = false;
 
   void _onVideoControllerUpdate() {
-    if (!mounted) {
-      return;
-    }
-    if (initialized != controller.value.initialized) {
-      initialized = controller.value.initialized;
-      setState(() {});
-    }
+    // if (!mounted) {
+    //   return;
+    // }
+    // if (initialized != controller.value.initialized) {
+    //   initialized = controller.value.initialized;
+    //   setState(() {});
+    // }
   }
 
   @override
   void initState() {
     super.initState();
-    controller.addListener(_onVideoControllerUpdate);
+    // controller.addListener(_onVideoControllerUpdate);
   }
 
   @override
   void dispose() {
-    controller.removeListener(_onVideoControllerUpdate);
+    // controller.removeListener(_onVideoControllerUpdate);
     super.dispose();
   }
 
@@ -396,10 +396,10 @@ class AspectRatioVideoState extends State<AspectRatioVideo> {
   Widget build(BuildContext context) {
     if (initialized) {
       return Center(
-        child: AspectRatio(
-          aspectRatio: controller.value?.aspectRatio,
-          child: VideoPlayer(controller),
-        ),
+        // child: AspectRatio(
+        //   aspectRatio: controller.value?.aspectRatio,
+        //   child: VideoPlayer(controller),
+        // ),
       );
     } else {
       return Container();
