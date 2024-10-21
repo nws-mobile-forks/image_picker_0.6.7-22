@@ -321,11 +321,14 @@ public class ImagePickerDelegate
       finishWithAlreadyActiveError(result);
       return;
     }
-
-    if (!permissionManager.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-      permissionManager.askForPermission(
-          Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_EXTERNAL_IMAGE_STORAGE_PERMISSION);
-      return;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      // No need request permission for SDK >= 33
+    } else {
+      if (!permissionManager.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+        permissionManager.askForPermission(
+                Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_EXTERNAL_IMAGE_STORAGE_PERMISSION);
+        return;
+      }
     }
 
     launchPickImageFromGalleryIntent();
